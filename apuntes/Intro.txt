@@ -1,0 +1,3 @@
+Por paradigma, nuestro proyecto debe tener una estructura (como se ve en nuestros archivos y carpeta src).
+
+Cada componente debe iniciar con App. Esto para cada archivo que tenga la extension ".jsx"
