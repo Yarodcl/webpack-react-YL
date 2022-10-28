@@ -1,15 +1,18 @@
 const path = require('path');
-
+const HtmlWebpackPlugin = require('html-webpack-plugin'); //En estas variables llamamos a todos nuestros plugin a través de un export de la dependencia descargada en npm
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = { //Este es un objeto donde van a vivir todas nuestras configuraciones
-    entry: '.src/index.js', //Nuestro punto de entrada principal
+    entry: './src/index.js', //Nuestro punto de entrada principal
     output: { //Como se va a preparar nuestro proyecto
         path: path.resolve(__dirname, 'dist'), //Nos mostrará donde estamos ubicados y creará la carpeta dist
-        filename: 'bundle.js' //Acá estará nuestro resultado de nuestro output
+        filename: 'bundle.js', //Acá estará nuestro resultado de nuestro output
+        clean: true //Nos ayuda a limpiar el codigo
     },
     resolve: { //En el resolve podremos resolver todas las extensiones con las que vamos a trabajar
         extensions: [
             '.js', '.jsx'
         ],
+    },
         module: { //Dentro del modulo podremos crear las reglas de nuestro proyecto
         rules: [
             {
@@ -18,16 +21,37 @@ module.exports = { //Este es un objeto donde van a vivir todas nuestras configur
                 use: {
                     loader: 'babel-loader', //Identificamos los loaders que usaremos
                 }
+            },
+            {
+                test: /\.html$/,
+                use: {
+                    loader: 'html-loader'
+                }
+            },
+            {
+                test: /\.s[ac]ss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader'
+                ]
             }
         ]
         },
-        devServer: { //Nos permite crear un server local para ver cambios en vivo
-            static: {
-                directory: path.join(__dirname, 'dist'),
-            },
+        plugins: [
+            new HtmlWebpackPlugin({
+                template: './public/index.html',
+                filename: './index.html'
+            }),
+            new MiniCssExtractPlugin({
+                filename: '[name].css'
+            })
+        ],
+        devServer: {
+            static: path.join(__dirname, 'dist'),
             compress: true,
-            port: 3006,
-            open: true,
-        }
-    }
+            historyApiFallback: true,
+            port: 3005,
+        },
+
 }
