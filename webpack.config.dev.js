@@ -1,26 +1,19 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin'); //En estas variables llamamos a todos nuestros plugin a través de un export de la dependencia descargada en npm
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 module.exports = { //Este es un objeto donde van a vivir todas nuestras configuraciones
     entry: './src/index.js', //Nuestro punto de entrada principal
     output: { //Como se va a preparar nuestro proyecto
         path: path.resolve(__dirname, 'dist'), //Nos mostrará donde estamos ubicados y creará la carpeta dist
         filename: 'bundle.js', //Acá estará nuestro resultado de nuestro output
-        publicPath: "./",
         clean: true //Nos ayuda a limpiar el codigo
     },
     resolve: { //En el resolve podremos resolver todas las extensiones con las que vamos a trabajar
         extensions: [
             '.js', '.jsx'
         ],
-        alias: {
-            "@components": path.resolve(__dirname, 'src/components/'),
-            "@styles": path.resolve(__dirname, 'src/styles/')
-        }
     },
-    mode: 'production',
+    mode: 'development',
         module: { //Dentro del modulo podremos crear las reglas de nuestro proyecto
         rules: [
             {
@@ -55,11 +48,11 @@ module.exports = { //Este es un objeto donde van a vivir todas nuestras configur
                 filename: '[name].css'
             })
         ],
-        optimization: { //En este bloque se agregan todos los plugin que nos sirvan para optmiziar algo de la app
-            minimize: true,
-            minimizer: [
-                new CssMinimizerPlugin(),
-                new TerserPlugin(),
-            ]
-        }
+        devServer: {
+            static: path.join(__dirname, 'dist'),
+            compress: true,
+            historyApiFallback: true,
+            port: 3005,
+        },
+
 }
